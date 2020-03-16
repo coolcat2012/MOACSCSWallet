@@ -1,0 +1,128 @@
+<template name="views_scs_dashboard">
+    {{#if isMist }}
+      {{>mist_alert}}
+    {{/if}}
+
+    <div class="dapp-container">
+		<div class="row clear">
+			<div class="col col-6 mobile-full" >
+				<h1>{{{i18n "wallet.scs.dashboard.title"}}}</h1>
+			</div>
+		{{#if hasSubChains}} 			
+			<div class="col col-6 mobile-full" >
+				<br>
+				<br>
+				<i class="icon-layers"></i> {{formattedScsBlockNumber}}				
+			</div>
+		{{/if}}	
+		</div>
+		<div class="dapp-clear-fix"></div>
+			
+		{{#if hasSubChains}} 
+
+                <h2>{{i18n "wallet.scs.scsAccountsDescription"}}</h2>
+ 
+
+			<div class="wallet-box-list">
+                {{#each accounts}}
+                  {{> elements_scs_account account=_id }}
+
+                {{/each}}
+            </div>
+			<div class="dapp-clear-fix"></div>
+            <div class="dapp-clear-fix"></div>
+     
+			{{#if scsPendingConfirmations}}
+					<h2>{{i18n 'wallet.scs.transactions.pendingConfirmations'}}</h2>
+
+					{{> elements_transactions_table collection="ScsPendingConfirmations" ids=scsPendingConfirmations }}
+
+			{{/if}}
+
+            <!--h2>{{i18n "wallet.scs.scsListTitle"}}</h2>
+			
+
+            <div class="dapp-clear-fix"></div>
+
+            <div class="wallet-box-list">
+                {{#each subChains}}
+                    {{> elements_account account=_id}}
+                {{/each}}
+            </div -->
+			
+			
+		{{ /if }}
+            <!-- {{#if isMist}} -->
+                <a href="{{pathFor route='scs_add'}}" class="wallet-box create">
+                    <div class="account-pattern">
+                        +
+                    </div>
+                    <h3>{{i18n "wallet.scs.buttons.addSubChain"}}</h3>
+                </a>
+          <!--  {{/if}} -->
+
+<!--
+            <h2>{{i18n "wallet.accounts.walletsTitle"}}</h2>
+
+            {{#if hasMinimumBalance}}
+                <p>
+                    {{i18n "wallet.accounts.walletsDescription"}}
+                </p>
+            {{else}}
+                <p>
+                    {{{i18n "wallet.accounts.walletsDescriptionNotEnoughFunds"}}}
+                </p>
+            {{/if}}
+
+
+
+            <div class="wallet-box-list">
+            {{#each wallets}}
+                {{> elements_account account=_id wallets=true}}
+            {{/each}}
+            </div>
+
+            {{#if hasMinimumBalance}}
+                <a href="{{pathFor route='createAccount'}}" class="wallet-box create">
+                    <div class="account-pattern">
+                        +
+                    </div>
+                    <h3>{{i18n "wallet.app.buttons.addWallet"}}</h3>
+                </a>
+            {{/if}}
+-->
+  <!--      {{else}} -->
+            <!-- <div class="col col-5 mobile-full ">
+                <br>
+                {{#if isMist}}
+                    <button class="wallet-box create account">
+                        <div class="account-pattern">
+                            +
+                        </div>
+                        <h3>{{i18n "wallet.app.buttons.addAccount"}}</h3>
+                    </button>
+                {{/if}}
+            </div> -->
+    <!--        <div class="col col-5 mobile-full ">
+                <h3>{{i18n "wallet.app.texts.noAccounts.title"}}</h3>
+                <p>{{i18n "wallet.app.texts.noAccounts.text"}}</p>
+            </div>  -->
+     <!--   {{/if}}  -->
+<!--
+        <div class="dapp-clear-fix"></div>
+
+
+        {{#if allScsTransactions}}
+            <h2>{{i18n 'wallet.scs.transactions.latest'}}</h2>
+			{{> elements_scs_transactions_table limit=5}}
+-->       
+ <!--    {{> elements_scs_transactions_table limit=5}}  -->
+<!--
+        {{else}}
+
+            <h2>{{i18n 'wallet.transactions.none'}}</h2>
+        {{/if}}
+-->
+    </div>
+
+</template>

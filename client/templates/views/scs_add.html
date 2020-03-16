@@ -1,0 +1,104 @@
+<template name="views_scs_add">
+    <!-- {{#if hasAccounts}}
+        <h1>{{i18n "wallet.scs.newScs.title"}}</h1>
+    
+    {{else}}
+        <div class="col col-5 mobile-full ">
+            <h3>{{i18n "wallet.app.texts.noSCS.title"}}</h3>
+            <p>{{i18n "wallet.app.texts.noSCS.text"}}</p>
+        </div>
+    {{/if}} -->
+	
+
+        <!-- form for ASM -->
+        <form class="account-send-form" action="about:blank" target="dapp-form-helper-iframe" autocomplete="on">
+
+		<h1>{{i18n 'wallet.scs.newScs.title'}}</h1>
+  <!--  
+		<h3>{{i18n 'wallet.scs.asm.send.selectTransType' }}</h3>
+		<select name="select-trans-type" class="select-trans-type">
+			<option value="isDepsitting">{{i18n 'wallet.scs.asm.send.isDepositting' }}</option>
+			<option value="isWithdrawing">{{i18n 'wallet.scs.asm.send.isWithdrawing' }}</option>
+			<option value="isSending">{{i18n 'wallet.scs.asm.send.isSending'}}</option>
+		</select>
+		
+		
+		{{ #if TemplateVar.get "isIntra" }}
+			<h3>Within subchain</h3>
+		{{ else }}
+			<h3>with baseChain</h3>
+		{{ /if }}
+-->	
+        
+	    
+		<div class="row clear">
+			<div class="col col-6 mobile-full subChainAddr">
+				<h3>{{i18n 'wallet.scs.newScs.subChain-addr' }}</h3>
+				{{>dapp_addressInput placeholder="0x000000.." name="subChain-addr" autofocus=true class="subChain-addr"}}
+			</div>
+			
+			<div class="col col-6 mobile-full">
+                
+						<h3>{{i18n 'wallet.scs.newScs.dapp'}}</h3>
+						{{> dapp_addressInput placeholder="0x000000.." name="dapp" autofocus=true class="dapp"}}
+
+            </div>
+			
+			<!--div class="row clear subChain" >
+			<div class="col col-6 mobile-full subChain-Addr">
+				<h3>{{i18n 'wallet.scs.newScs.subChain-via' }}</h3>
+				{{>dapp_addressInput placeholder="0x000000.." name="subChain-via" autofocus=true class="subChain-via"}}
+			</div -->
+			<div class="dapp-clear-fix"></div>
+		</div>
+	    <!-- from/to-->
+        <div class="row clear">
+            <!--div class="row clear subChain" -->			
+			<div class="col col-6 mobile-full">
+                
+				<h4>
+					{{i18n "wallet.send.monitorAddr"}} 
+                </h4>
+                    <input pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$" placeholder="127.0.0.1" class="monitorAddrInput" value="{{monitorAddr}}">
+			</div>
+			
+			<div class="col col-6 mobile-full">
+                <h4>
+                    {{i18n "wallet.send.monitorPort"}} 
+                </h4>
+                    <input pattern="^[0-9]{1,5}$" placeholder="8548" class="monitorPortInput" value="{{monitorPort}}">
+                <br>
+            </div>
+			<div class="dapp-clear-fix"></div>
+        </div>
+		
+		<div class="row clear">
+			<!--div class="col col-6 mobile-full subChainAddr" >
+				<h3>{{i18n "wallet.scs.newScs.scsName"}}</h3>
+				<input type="string" name="name" placeholder="SC_name" class="name">
+			</div -->
+			<div class="col col-6 mobile-full subChainAddr" >
+				<h3>{{i18n "wallet.scs.newScs.scCoinUnit"}}</h3>
+				<input type="string" name="scCoinUnit" placeholder="MC" class="scCoinUnit">
+			</div>
+			<!--div class="col col-6 mobile-full from">
+				<h3>{{i18n "wallet.scs.newScs.scsOwner"}}</h3>
+				{{> dapp_selectAccount accounts=(selectAccounts deployContract) showAccountTypes=true class='send-from'}}
+			</div-->
+			<div class="dapp-clear-fix"></div>
+		</div>
+		
+   
+		<br><br>
+            <hr>
+    
+            <!-- a button type="submit" will send the form -->
+    
+            <button type="submit" class="dapp-block-button">
+
+                    {{i18n 'buttons.ok'}}
+
+            </button>
+
+        </form>
+</template>
