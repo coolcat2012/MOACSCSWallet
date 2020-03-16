@@ -1,20 +1,17 @@
-# Moac Wallet Ðapp
+# Moac Appchain Wallet Ðapp
 
-The Moac wallet. Change from Ethereum Wallet Dapp.
+The Moac Appchain wallet. Change from Ethereum Wallet Dapp.
 
 **NOTE** The wallet is not yet official released,
 can contain severe bugs!  
-  
-## Need to change for MOAC
-Please search Need to change for MOAC for those places
 
 ## Development  
 Start an `moac` node and the app using meteor and open http://localhost:3000 in your browser:  
 
 Test Net:  
-    $ moac --testnet --rpccorsdomain "http://localhost:3000" --rpc --unlock <your account>  
+    $ moac --testnet --rpccorsdomain "http://localhost:3000" --rpc --rpcapi=db,mc,net,chain3,personal,vnode,debug,scs --unlock <your account>  
 Main:  
-    $ moac --rpccorsdomain "http://localhost:3000" --rpc --unlock <your account>  
+    $ moac --rpccorsdomain "http://localhost:3000" --rpc --rpcapi=db,mc,net,chain3,personal,vnode,debug,scs --unlock <your account>  
 
 Starting the wallet dapp using [Meteor](https://meteor.com/install)
 
