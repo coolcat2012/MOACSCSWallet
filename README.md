@@ -13,9 +13,13 @@ Test Net:
 Main:  
     $ moac --rpccorsdomain "http://localhost:3000" --rpc --rpcapi=db,mc,net,chain3,personal,vnode,debug,scs --unlock <your account>  
 
+Start SCS as Monitor listening on 8548 port as the RPC Port:
+    $ scsserver --rpc --rpcaddr 127.0.0.1 --rpcport 8548
+
 Starting the wallet dapp using [Meteor](https://meteor.com/install)
 
-    $ cd MoacWallet
+    $ cd MOACSCSWallet
+    $ npm install
     $ meteor
 
 Go to http://localhost:3000
