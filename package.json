@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.2",
-    "meteor-node-stubs": "^0.4.1"
+    "bignumber.js": "^9.0.0",
+    "meteor-node-stubs": "^0.4.1",
+    "underscore": "^1.9.2",
+    "utf8": "^3.0.0",
+    "xhr2": "^0.2.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }

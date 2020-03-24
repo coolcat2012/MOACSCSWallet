@@ -34,9 +34,41 @@ observeScsBlocks = function(){
 	}
 
 	var updateScsBlocks = function(){
+		
 		//console.log('observe scs blocks1');
 		subChains = SubChains.find({}).fetch();
 			_.each(subChains,function( subChain ){
+				if( !subChain.address )
+					return;
+				/*chainscs3.scs.getMicroChainList(function(err,res){
+					if(res){
+						console.log('get sub Chain list,'+res);
+						subChainAddr = res[0];
+						
+						chainscs3.scs.getMicroChainInfo(subChainAddr,function(err,res){
+							if(res){
+								console.log('get sub Chain info,'+res);
+								//dappAddr = res.dapp
+							}else{
+								console.log('fail to get sub chain info,'+err);
+							}
+						});
+						chainscs3.scs.getDappAddrList(subChainAddr,function(err,res){
+							if(res){
+								console.log('get dapp list,'+res[0]);
+								//dappAddr = res.dapp
+							}else{
+								console.log('fail to get dapp list,'+err);
+							}
+						});
+						
+					}else{
+						console.log('fail to get sub chain list,'+err);
+					}
+				});*/
+				
+				
+				
 				chain3.scs.getBlockNumber(subChain.address,function(e, res){
 					if( e ){
 						console.log('observe scs:'+e);

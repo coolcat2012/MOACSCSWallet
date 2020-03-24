@@ -149,8 +149,14 @@ Template['views_scs_send'].onCreated(function () {
 	TemplateVar.set(template, 'sending', false);
 	
 	var scsCount = SubChains.find({}).count();
-	if( !scsCount ) 
-		FlowRouter.go('scs_dashboard');
+	if( !scsCount ){ 
+		GlobalNotification.error({
+			content:"No Monitor URL!", //translateExternalErrorMessage.message(err.message),
+			duration:8
+		});
+		FlowRouter.go('scs_add');   //notice
+		return;
+	}	
 	var subChains = SubChains.find({}).fetch();
 		subChain = subChains[0];
 			subChainAddr = subChain.address,

@@ -2,7 +2,7 @@ import '../collections.js';
 import './walletConnector.js';
 
 
-
+var scsSubChainIntervalId = null;
 
 /**
 Update the owner list
@@ -315,5 +315,58 @@ observeSubChains = function(){
             });*/
         }
     });
+	
+	var updateSubChains = function(){
+		if( SubChains.find({}).count() <= 0 ){
+			console.log('no subChain' );
+			return;
+		}
+		chainscs3.scs.getMicroChainList(function(err,res){
+			if(res){
+				//console.log('get sub Chain list,'+res);
+				subChainAddr = res[0];
+						
+				//chainscs3.scs.getMicroChainInfo(subChainAddr,function(err,res){
+				//	if(res){
+				//		console.log('subChain get sub Chain info,'+res);
+							//dappAddr = res.dapp
+				//	}else{
+				//		console.log('subChain fail to get sub chain info,'+err);
+				//	}
+				//});
+				chainscs3.scs.getDappAddrList(subChainAddr,function(err,res){
+					if(res){
+					//	console.log('subChain get dapp list,'+res[0]);
+						dappAddr = res[0];
+						var subChain = SubChains.findOne({});
+						if( !subChain.address ){
+							SubChains.update(subChain._id,
+								{$set:{address: subChainAddr, dappAddr: dappAddr}});
+							return;
+						}
+						if( subChain && (subChain.address !== subChainAddr )
+							&& (subChain.dappAddr !== dappAddr ) ){
+							//console.log('update SubChain with:' + subChainAddr + ','
+							//	+ dappAdddr );
+							SubChains.update(subChain._id,
+								{$set:{address: subChainAddr, dappAddr: dappAddr}});
+						}else{
+							//console.log(' subchain OK' );
+						}
+					}else{
+						console.log('subChain fail to get dapp list,'+err);
+					}
+				});
+						
+			}else{
+				console.log('subchain to get sub chain list,'+err);
+			}
+		});
+	}
+	
+	clearInterval(scsSubChainIntervalId);
+    scsBlockIntervalId = setInterval(function() {
+        updateSubChains();
+    }, 10000);
 
 };

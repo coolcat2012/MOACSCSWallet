@@ -11,6 +11,8 @@ ScsBlocks.init = function(){
     ScsBlocks.clear();
 	
 	_.each(SubChains.find({}).fetch(), function(subChain){
+		if( !subChain.address )
+			return;
 		chain3.scs.getBlockNumber(subChain.address, function(e,blockNumber){
 			if( !e ){
 				//var block = ScsBlocks.findOne({address:subChain.address}).fetch()

@@ -145,32 +145,32 @@ Template['views_scs_add'].events({
     'submit form': function (e, template) {
 		//var microChainDapp = TemplateVar.get('subChainDapp') || false;
 
-        var address = TemplateVar.getFrom('.dapp-address-input .subChain-addr', 'value'),
+        var address = null, //TemplateVar.getFrom('.dapp-address-input .subChain-addr', 'value'),
 			//via = TemplateVar.getFrom('.dapp-address-input .subChain-via', 'value'),
 			via = Session.get('vnode');
 			//name = TemplateVar.getFrom('.input .name', 'value'),
 			name = 'scName'; //$('input[name="name"]').val(),
 			scCoinUnit = $('input[name="scCoinUnit"]').val(),
-			dappAddr = TemplateVar.getFrom('.dapp-address-input .dapp', 'value'),
+			dappAddr = null; //TemplateVar.getFrom('.dapp-address-input .dapp', 'value'),
 			//selectedAccount = Helpers.getAccountByAddress(template.find('select[name="dapp-select-account"].send-from').value),
             monitorAddr = TemplateVar.get('monitorAddr'),
-            monitorPort = TemplateVar.get('monitorPort'),
-			owner = McAccounts.findOne({});
+            monitorPort = TemplateVar.get('monitorPort');
+			//owner = McAccounts.findOne({});
 
 		
 		
-		if(!chain3.isAddress(address) )
-                return GlobalNotification.warning({
-                    content: 'i18n:wallet.scs.newScs.noScsAddress',
-                    duration: 2
-                });
+		//if(!chain3.isAddress(address) )
+        //        return GlobalNotification.warning({
+        //            content: 'i18n:wallet.scs.newScs.noScsAddress',
+        //            duration: 2
+        //        });
 				
 				
-		if(!chain3.isAddress(dappAddr) )
-                return GlobalNotification.warning({
-                    content: 'i18n:wallet.scs.newScs.noDappAddr',
-                    duration: 2
-                });
+		//if(!chain3.isAddress(dappAddr) )
+        //        return GlobalNotification.warning({
+        //            content: 'i18n:wallet.scs.newScs.noDappAddr',
+        //            duration: 2
+        //        });
 				
 		if(!monitorAddr )
 			monitorAddr = "127.0.0.1";
@@ -196,28 +196,28 @@ Template['views_scs_add'].events({
 			SubChains.remove(subChain._id);
 		});
 		
-		if( SubChains.find({name:name}).count()>0 ){
+		//if( SubChains.find({name:name}).count()>0 ){
 			//alert('sc has exits');
-			GlobalNotification.error({
-				content:"Name has been used, rename it!", //translateExternalErrorMessage.message(err.message),
-				duration:8
-			});
-			return;
+		//	GlobalNotification.error({
+		//		content:"Name has been used, rename it!", //translateExternalErrorMessage.message(err.message),
+		//		duration:8
+		//	});
+		//	return;
 			//FlowRouter.go('scs_dashboard');
-		}
+		//}
 		
 		
 		
-		if( SubChains.findOne({address: address})){  
+		//if( SubChains.findOne({address: address})){  
 		//if( SubChains.find({address:address}).count()>0 ){
 			//alert('sc has exits');
-			GlobalNotification.error({
-				content:"Micro chain has exists!", //translateExternalErrorMessage.message(err.message),
-				duration:8
-			});
-			FlowRouter.go('scs_dashboard');
-		}else{
-			var dappAddr = TemplateVar.getFrom('.dapp-address-input .dapp', 'value');
+		//	GlobalNotification.error({
+		//		content:"Micro chain has exists!", //translateExternalErrorMessage.message(err.message),
+		//		duration:8
+		//	});
+		//	FlowRouter.go('scs_dashboard');
+		//}else{
+		//	var dappAddr = TemplateVar.getFrom('.dapp-address-input .dapp', 'value');
 				//owner = Helpers.getAccountByAddress(template.find('select[name="dapp-select-account"].send-from').value);
 		//chain3.scs.getMicroChainInfo(address).then(function(e,subChainInfo){
 		//	if(!e){
@@ -225,12 +225,12 @@ Template['views_scs_add'].events({
 
 					var insert = {
 						name: name,
-						address: address,
-						dappAddr: dappAddr,
+						//address: address,
+						//dappAddr: dappAddr,
 						via: via,
 						monitorAddr: monitorAddr,
 						monitorPort: monitorPort,
-						owner: owner,
+						//owner: owner,
 						coinUnit: scCoinUnit
 					};
 					SubChains.insert(insert);
@@ -241,6 +241,6 @@ Template['views_scs_add'].events({
 //			}
 		//});	
 	}
-}
+
 });
 
