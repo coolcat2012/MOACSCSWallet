@@ -295,6 +295,39 @@ Template['elements_scs_transactions_row'].helpers({
         var token = Tokens.findOne(this.tokenId);
 
         return (token) ? Helpers.formatNumberByDecimals(this.value, token.decimals) +' '+ token.symbol : this.value;
+    },
+	
+	'formatScsTransactionBalance': function(value, exchangeRates, unit) {
+
+		// make sure not existing values are not Spacebars.kw
+		if(unit instanceof Spacebars.kw)
+			unit = null;
+
+		var unit = unit || McTools.getUnit(),
+			format = '0,0.00';
+
+		if((unit === 'usd' || unit === 'eur' || unit === 'btc') &&
+		   exchangeRates && exchangeRates[unit]) {
+
+			if(unit === 'btc')
+				format += '[000000]';
+			else
+				format += '[0]';
+
+			var price = new BigNumber(String(chain3.fromSha(value, 'mc')), 10).times(exchangeRates[unit].price);
+			return McTools.formatNumber(price, format) + ' '; //+ unit.toUpperCase();
+		} else {
+			return McTools.formatBalance(value, format + '[0000000000000000] ');//UNIT');
+		}
+	},
+
+	
+	'scCoinUnit': function () {
+        subChain = SubChains.findOne({});
+		if( subChain)
+			return subChain.coinUnit;
+		else
+			return "";
     }
 });
 

@@ -112,7 +112,7 @@ Updates a transaction.
 */
 var updateScsTransaction = function(newDocument, transaction, receipt){
     var id = newDocument._id || Helpers.makeId('tx', transaction.transactionHash || newDocument.transactionHash);
-    console.log('update motherchain tx');
+    console.log('scs update motherchain tx');
     // if transaction has no transactionId, stop
     if(!id)
         return;
@@ -126,7 +126,7 @@ var updateScsTransaction = function(newDocument, transaction, receipt){
     newDocument._id = id;
 
     if(transaction) {
-        console.log('transaction',transaction);
+        console.log('scstransaction',transaction);
         newDocument.blockNumber = transaction.blockNumber;
         newDocument.blockHash = transaction.blockHash;
         newDocument.transactionIndex = transaction.transactionIndex;
@@ -274,26 +274,26 @@ observeScsTransactions = function(){
     */
     var checkScsTransactionConfirmations = function(tx){
         var confCount = 0;
-
+		console.log("checkScsTransactin 1 ");
         // check for confirmations
         if(!tx.confirmed && tx.transactionHash) {
-
+			console.log("checkScsTransactin 2 ");
             var updateScsTransactions = function(e, blockHash){
                 console.log('updateScsTransactions', e, blockHash);
 
                 if(!e) {
-                    console.log('tx_blocknumber ' + tx.blockNumber);
+                    console.log('scs tx_blocknumber ' + tx.blockNumber);
                     var confirmations = (tx.blockNumber && McBlocks.latest.number) ? (McBlocks.latest.number + 1) - tx.blockNumber : 0;
                     confCount++;
-                    console.log('confirmation ' + confirmations);
+                    console.log('scs confirmation ' + confirmations);
 
                     // get the latest tx data
                     console.log('tx before find', tx);
                     tx = ScsTransactions.findOne(tx._id);
-                    console.log('tx after find', tx);
+                    console.log('scs tx after find', tx);
                     // stop if tx was removed
                     if(!tx) {
-                        console.log('no tx stop watch');
+                        console.log('scs no tx stop watch');
                         filter.stopWatching();
                         return;
                     }
@@ -307,27 +307,27 @@ observeScsTransactions = function(){
                             chain3.mc.getTransactionReceipt(tx.transactionHash, function(e, receipt){
 
                                 if(e || !receipt || !transaction) {
-                                    console.log('no receipt or transaction')
+                                    console.log('scs no receipt or transaction')
                                     return;
                                     }
                                 // update with receipt
                                 if(transaction.blockNumber !== tx.blockNumber){
-                                     console.log('transactionBLK',transaction.blockNumber);
-                                    console.log('txBLK',tx.blockNumber);
+                                     console.log('scs transactionBLK',transaction.blockNumber);
+                                    console.log('scs txBLK',tx.blockNumber);
                                     updateScsTransaction(tx, transaction, receipt);
 
                                 }
                                    
                                 // enable transaction, if it was disabled
                                 else if(transaction.blockNumber && tx.disabled){
-                                    console.log('enable tx');
+                                    console.log('scs enable tx');
                                     ScsTransactions.update(tx._id, {$unset:{
                                         disabled: ''
                                     }});
                                 }
                                 // disable transaction if gone (wait for it to come back)
                                 else if(!transaction.blockNumber) {
-                                    console.log('disable tx');
+                                    console.log('scs disable tx');
                                     ScsTransactions.update(tx._id, {$set:{
                                         disabled: true
                                     }});
@@ -409,28 +409,32 @@ observeScsTransactions = function(){
         @method added
         */
         added: function(newDocument) {
-            // console.log("add newDocument",newDocument);
+            //console.log("scs add newDocument",newDocument);
             var confirmations = McBlocks.latest.number - newDocument.blockNumber;
-             console.log('mother chain add' + confirmations);
-            // add to accounts
-            Wallets.update({address: newDocument.from}, {$addToSet: {
-                transactions: newDocument._id
-            }});
-            Wallets.update({address: newDocument.to}, {$addToSet: {
-                transactions: newDocument._id
-            }});
+             
+            if( newDocument.shardingFlag && (newDocument.shardingFlag !== '0x01') &&
+					(newDocument.shardingFlag !== '0x02') ){
+				console.log('tx type ：'+newDocument.shardingFlag);
+				// add to accounts
+				//Wallets.update({address: newDocument.from}, {$addToSet: {
+				//	transactions: newDocument._id
+				//}});
+				//Wallets.update({address: newDocument.to}, {$addToSet: {
+				//	transactions: newDocument._id
+				//}});
+				
+				// remove pending confirmations, if present
+				if(newDocument.operation) {
+					
+					checkConfirmation(Helpers.makeId('pc', newDocument.operation));
+				}
 
-            // remove pending confirmations, if present
-            if(newDocument.operation) {
-                checkConfirmation(Helpers.makeId('pc', newDocument.operation));
-            }
 
-
-            // check first if the transaction was already mined
-            // TODO: 暂时删了，将来再弄回来
-            //if(!newDocument.confirmed) {
-            //    checkScsTransactionConfirmations(newDocument);
-            //}
+				// check first if the transaction was already mined
+				if(!newDocument.confirmed) {				
+					checkScsTransactionConfirmations(newDocument);
+				}
+			}
 
             // If on main net, add price data
             if( Session.get('network') == 'main' && 

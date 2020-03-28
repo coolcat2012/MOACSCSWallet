@@ -290,6 +290,8 @@
 				"latest": "最近子链交易"
 			},
 			"scsListTitle": "子链列表",
+			"baseChain": "母链",
+			"subChain": "子链",
 			"scsAccountsDescription": "子链账号",
 			"buttons": {
 				"addSubChain": "配置子链"

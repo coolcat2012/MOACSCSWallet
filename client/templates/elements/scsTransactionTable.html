@@ -44,37 +44,67 @@
             <h2>{{transactionType}}</h2>
             
             <p>
-                {{#if from}}
-				{{> elements_account_link address=from}}
+				{{#if $eq shardingFlag "0x01"}}
+					{{#if to}}
+						{{> elements_account_link address=to}}
+						<!--    {{else}}
+						{{> elements_createdContractAt contractAddress=contractAddress deployedData=deployedData}}
+				--> 
+					{{/if}}
+					({{i18n "wallet.scs.subChain"}}
+					<span class="arrow">→</span> 
+					{{i18n "wallet.scs.baseChain"}})
+					
+				{{else if $eq shardingFlag "0x02"}}
+					{{#if from}}
+					{{> elements_account_link address=from}}
+					{{/if}}
+					<span class="arrow">→</span> 
+					{{#if to}}
+						{{> elements_account_link address=to}}
+						<!--    {{else}}
+						{{> elements_createdContractAt contractAddress=contractAddress deployedData=deployedData}}
+				--> 
+					{{/if}}
+				{{else}}
+					{{#if from}}
+					{{> elements_account_link address=from}}
+					{{/if}}
+					({{i18n "wallet.scs.baseChain"}}
+					<span class="arrow">→</span> 
+						{{i18n "wallet.scs.subChain"}})
 				{{/if}}
-                <span class="arrow">→</span> 
-                {{#if to}}
-                    {{> elements_account_link address=to}}
-            <!--    {{else}}
-                    {{> elements_createdContractAt contractAddress=contractAddress deployedData=deployedData}}
-			-->            
-			{{/if}}
+                       
+			
             </p>
 
-            {{#if ownerConfirmationCount}}
-                <div class="owner-confirmations">
-                    {{#each owners}}
-                        <div data-tooltip="{{accountNameOrAddress this}}" class="simptip-position-bottom simptip-movable">
-                            {{#if ownerIsConfirmed}}<i class="icon-check"></i>{{/if}}
-                            {{> dapp_identicon identity=this class="dapp-tiny"}}
-                        </div>
-                    {{/each}}
-                    <span>{{ownerConfirmationCount}}</span>
-                </div>
-            {{/if}}
+			
+			{{#if ownerConfirmationCount}}
+				<div class="owner-confirmations">
+					{{#if $eq shardingFlag "0xfe"}}
+						{{#each owners}}
+							<div data-tooltip="{{accountNameOrAddress this}}" class="simptip-position-bottom simptip-movable">
+								{{#if ownerIsConfirmed}}<i class="icon-check"></i>{{/if}}
+								{{> dapp_identicon identity=this class="dapp-tiny"}}
+							</div>
+						{{/each}}
+						<span>{{ownerConfirmationCount}}</span>
+					{{/if}}	
+				</div>
+				
+			{{/if}}
         </td>
-        <td class="info">
-            {{#with unConfirmed}}
-                {{confirmations}} {{i18n "commonWords.of"}} {{totalConfirmations}} {{i18n "wallet.transactions.confirmations"}}
-            {{else}}
-                {{fromNowTime}}
-            {{/with}}
-        </td>
+		
+		<td class="info">
+			{{#if $eq shardingFlag "0xfe"}}
+				{{#with unConfirmed}}
+					{{confirmations}} {{i18n "commonWords.of"}} {{totalConfirmations}} {{i18n "wallet.transactions.confirmations"}}
+				{{else}}
+					{{fromNowTime}}
+				{{/with}}
+			{{/if}}
+		</td>
+		
         {{#if outOfGas}}
             <td class="transaction-amount minus">
                 -{{dapp_formatBalance fee '0,0.00[000] UNIT'}}
@@ -85,29 +115,46 @@
         {{else}}
             {{#if incomingTx ../account}}
                 <td class="transaction-amount plus">
-                    {{#if tokenId}}
-                        {{tokenValue}}
-                    {{else}}
-                        {{formatTransactionBalance value exchangeRates}}
-                    {{/if}}
+					{{#if $eq shardingFlag "0xfe"}}
+						{{#if tokenId}}
+							-{{tokenValue}}
+						{{else}}
+							-{{formatTransactionBalance value exchangeRates}}
+						{{/if}}
+					{{else}}
+						{{#if tokenId}}
+							-{{tokenValue}}
+						{{else}}
+							-{{formatScsTransactionBalance value exchangeRates}}{{scCoinUnit}}
+						{{/if}}
+					{{/if}}
                 </td>
-                <td>
+                <!--td>
                     <i class="icon-arrow-left plus"></i>
-                </td>
+                </td -->
             {{else}}
                 <td class="transaction-amount minus">
-                    {{#if tokenId}}
-                        -{{tokenValue}}
-                    {{else}}
-                        -{{formatTransactionBalance value exchangeRates}}
-                    {{/if}}
+					{{#if $eq shardingFlag "0xfe"}}
+						{{#if tokenId}}
+							{{tokenValue}}
+						{{else}}
+							{{formatTransactionBalance value exchangeRates}}
+						{{/if}}
+					{{else}}
+						{{#if tokenId}}
+							-{{tokenValue}}
+						{{else}}
+							-{{formatScsTransactionBalance value exchangeRates}}{{scCoinUnit}}
+						{{/if}}
+					{{/if}}
                 </td>
-                <td>
+                <!--td>
                     <i class="icon-arrow-right minus"></i>
-                </td>
+                </td -->
             {{/if}}
         {{/if}}
-        {{#if $eq ../collection "PendingConfirmations"}}
+        
+		{{#if $eq ../collection "PendingConfirmations"}}
             {{#if sending}}
                 <td colspan='2' class="button">
                     {{> spinner}}
@@ -149,6 +196,7 @@
                 {{/if}}                                   
             {{/if}}
         {{/if}}
+		
     </tr>
 </template>
 

@@ -301,6 +301,8 @@
                 "latest": "Recent Transaction on Subchain"
             },
             "scsListTitle": "Subchain List",
+			"baseChain": "Mother Chain",
+			"subChain": "SubChain",
             "scsAccountsDescription": "Subchain Account",
             "buttons": {
                 "addSubChain": "Configure Subchain"
